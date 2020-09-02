@@ -1,0 +1,178 @@
+---
+title: "HW2 ADA"
+author: "Jingchuan Fan"
+date: "2020/8/27"
+output: html_document
+---
+
+# 1 Import survey data
+
+```{r}
+
+C1survey<-read.csv("https://raw.githubusercontent.com/kijohnson/ADA-FAll-2020/master/Class%20One/Class%201%20Survey%20Fall%202020.csv")
+
+```
+
+# 2 Determine
+
+```{r}
+
+# a. the number of observations 
+
+summary(C1survey$id)
+
+```
+
+```{r}
+
+#b. the number of variables in the dataframe.
+
+dim(C1survey)
+
+```
+
+#3 Rename column variables
+
+```{r}
+#a.Rename the column variables
+
+names(C1survey)<-c("id","like_cats","like_dogs"
+,"items_desert","slogan","fav_day","sleepingschedule","fav_food","fav_,drink","fav_season","fav_Month","Hobby"
+,"DegreeProgram","Primary_Speciliazation","Primary_statisticalsoftware","Level_RExperience","Coding_comfortable","Coding_lenghth","Class_Expectation","PH_Intereset","fav_number"
+,"Birthday_day","Birthday_month","Home_country","Home_State","Home_city","HighestEducationlevel")
+
+```
+
+```{r}
+
+# b. Display that they are renamed
+
+varlist<-colnames(C1survey)
+varlist
+```
+
+# 4 DETERMINATION OF VARIABLES CHARACTERISTICS
+
+```{r}
+
+sapply(C1survey, class)
+
+table(sapply(C1survey, class))
+
+```
+
+# 5 check the bday and bmonth variables for any unusual or missing values
+
+```{r}
+
+#a.Check unusual values
+
+str(C1survey)
+summary(C1survey$Birthday_day)
+summary(C1survey$Birthday_month)
+
+#Finding that participants whose ID number is 31,8,17,25 have unsual values which are not numeric values
+
+
+```
+
+```{r}
+
+#b.change unusual values into numeric values using which function
+
+#change Brithday_day unsual values uisng which function
+
+C1survey[which(C1survey$id==31),]$Birthday_day<-26
+
+#change Brithday_month unsual values using which function
+
+C1survey[which(C1survey$id==31),]$Birthday_month<-3
+C1survey[which(C1survey$id==8),]$Birthday_month<-12
+C1survey[which(C1survey$id==17),]$Birthday_month<-8
+C1survey[which(C1survey$id==25),]$Birthday_month<-8
+
+
+```
+
+```{r}
+#c Find Median
+
+# Median for Birthday_month
+
+C1survey$Birthday_month_c<-as.character(C1survey$Birthday_month)
+C1survey$Birthday_month_n<-as.numeric(C1survey$Birthday_month_c)
+median(C1survey$Birthday_month_n)
+
+```
+
+```{r}
+
+# Median for Birthday_day
+
+C1survey$Birthday_day_c<-as.character(C1survey$Birthday_day)
+C1survey$Birthday_day_n<-as.numeric(C1survey$Birthday_day_c)
+median(C1survey$Birthday_day_n)
+
+```
+
+#6 Create bseason variable
+
+```{r}
+
+#a. Create a new variable bseason
+
+#winter=12/1 to 2/29
+
+C1survey$bseason[C1survey$Birthday_month_n==12|C1survey$Birthday_month_n==1|C1survey$Birthday_month_n==2]<-"winter"
+
+#spring=3/1 to 5/31
+
+C1survey$bseason[C1survey$Birthday_month_n>=3 & C1survey$Birthday_month_n<=5]<-"spring"
+
+#summer=6/1 to 8/31
+
+C1survey$bseason[C1survey$Birthday_month_n>=6 & C1survey$Birthday_month_n<=8]<-"summer"
+
+#fall=9/1 to 11/30
+
+C1survey$bseason[C1survey$Birthday_month_n>=9 & C1survey$Birthday_month_n<=11]<-"fall"
+
+
+```
+
+```{r}
+#b.Using the table function, print a table of Seasons in the columns and bmonths in the rows
+
+Seasons<-table(C1survey$Birthday_month_n,C1survey$bseason)
+Seasons
+
+```
+
+```{r}
+#c.Sum the columns using the addmargins function 
+addmargins(Seasons)
+
+# 10 in fall, 7 in spring, 9 in summer ,6 in winter
+
+```
+
+# 7 Pick your favorite variable to analyze
+
+```{r}
+
+# Q: What is the most people favourite day of the week and least like day of the week?
+
+table(C1survey$fav_day)
+
+# Answer: Most people prefer Friday(12) and Wednesday is the least like day for only 1 people like 
+
+
+#Using table fucntion to show the distrubution to see the highest and lowest frequency
+
+```
+
+
+
+
+
+
